@@ -1,5 +1,5 @@
 import time
-import psutils 
+import psutil
 import functools
 
 
