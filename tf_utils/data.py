@@ -17,6 +17,8 @@ import time
 import functools
 import psutil
 
+from tf_utils.utils import *
+
 
 ## for cifar10 
 tar = 'cifar-10-python.tar.gz'
