@@ -37,7 +37,14 @@ train_ds=ds.get_train_ds()
 
 test_ds=ds.get_eval_ds()
 ```
+### Image Augmentation
+The data module calls the following augmentation for training dataset image batches by default 
 
+```
+ cutout(flip_left_right(random_pad_crop(image_batch)))
+ 
+``` 
+  
 ### training
 ```
 #build model 
