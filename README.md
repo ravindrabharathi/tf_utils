@@ -9,8 +9,6 @@ Supports the following
 6. Plot misclassified images 
 
 
-
-
 ### Installation
 ```
 !pip install --upgrade git+https://github.com/ravindrabharathi/tf_utils
@@ -88,4 +86,21 @@ vz.plot_cifar10_files(train_ds)
 res=vz.get_misclassified_images(model,test_ds)
 vz.plot_misclassified_images(res[0],res[1],res[2],res[3],52)
 ```
+
+#### Note : 
+if you need to use tensorflow2 on colab , you may use the following code to select tf2 on colab
+```
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+# Install TensorFlow
+try:
+  # %tensorflow_version only exists in Colab.
+  %tensorflow_version 2.x
+except Exception:
+  pass
+
+import tensorflow as tf
+
+```
+
 
