@@ -69,7 +69,7 @@ def get_cutout(img,prob=50,size=8,min_size=5,use_fixed_size=True):
   #invert the zeros and ones 
   mask = tf.ones_like(mask ) - mask
   
-  print(tf.shape(mask))
+  #print(tf.shape(mask))
   
   tmp_img = tf.multiply(img,mask)
   
