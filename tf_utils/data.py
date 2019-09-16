@@ -18,6 +18,7 @@ import functools
 import psutil
 
 from tf_utils.utils import *
+from tf_utils.transforms import *
 
 
 ## for cifar10 
