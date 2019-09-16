@@ -1,3 +1,5 @@
+from tf_utils.data import *
+
 #function to plot n images from dataset
 def plot_cifar10_files(dataset,n=5):
   import matplotlib.pyplot as plt
