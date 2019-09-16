@@ -88,7 +88,7 @@ vz.plot_misclassified_images(res[0],res[1],res[2],res[3],52)
 ```
 
 #### Note : 
-if you need to use tensorflow2 on colab , you may use the following code to select tf2 on colab
+In order to use tensorflow2 on colab , you may use the following code to select tf2 on colab
 ```
 from __future__ import absolute_import, division, print_function, unicode_literals
 
