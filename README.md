@@ -8,6 +8,7 @@ Supports the following
 5. Plot images from Dataset 
 6. Plot misclassified images 
 
+You may read the instructions below or use the [test notebook](https://github.com/ravindrabharathi/tf_utils/blob/master/test/tf_utils_test.ipynb) to try out the various steps 
 
 ### Installation
 ```
