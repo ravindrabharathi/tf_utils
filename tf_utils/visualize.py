@@ -1,4 +1,8 @@
 from tf_utils.data import *
+from sklearn import metrics
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+from sklearn.utils.multiclass import unique_labels
 
 #function to plot n images from dataset
 def plot_cifar10_files(dataset,n=5):
@@ -114,3 +118,55 @@ def plot_misclassified_images(wrong_indices,wrong_labels,true_labels,wrong_set,n
     
     
     displayRow(images,titles)
+
+
+# function to plot confusion matrix
+def plot_confusion_matrix(model,test_ds):  
+  num_steps=np.ceil(10000/batch_size)
+  pred=model.predict(test_ds,steps =num_steps, verbose=1)
+  pred2=np.argmax(pred,axis=1)
+  
+  c=0
+  for record in test_ds.take(num_steps):
+    if c==0:
+      x=record[0].numpy()
+      y=record[1].numpy()
+      c+=1
+    else:
+      y= np.vstack((y,record[1].numpy()))
+      x= np.vstack((x,record[0].numpy()))
+
+  y=y[:10000]
+  pred2=pred2[:10000]
+  x=x[:10000]
+  y1=np.argmax(y, axis=1)   
+  
+  c_matrix = metrics.confusion_matrix(y1, pred2)  
+  
+  
+  fig, ax= plt.subplots()
+  fig.set_figheight(10)
+  fig.set_figwidth(10)
+  title='confusion matrix'
+  im = ax.imshow(c_matrix, interpolation='nearest', cmap=plt.cm.Oranges)
+  
+  ax.figure.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
+ 
+  ax.set(xticks=np.arange(c_matrix.shape[1]),
+           yticks=np.arange(c_matrix.shape[0]),
+           xticklabels=class_names, yticklabels=class_names,
+           title=title,
+           ylabel='True label',
+           xlabel='Predicted label')
+
+  plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+             rotation_mode="anchor")
+
+  fmt = 'd' 
+  thresh = c_matrix.max() / 2.
+  for i in range(c_matrix.shape[0]):
+      for j in range(c_matrix.shape[1]):
+          ax.text(j, i, format(c_matrix[i, j], fmt),
+                    ha="center", va="center",
+                    color="white" if c_matrix[i, j] > thresh else "black")
+  fig.tight_layout()    
