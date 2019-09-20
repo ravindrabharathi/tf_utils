@@ -7,6 +7,7 @@ Supports the following
 4. Image Augmentation (random-pad_crop, flip-left_right, cutout) of Image Batches
 5. Plot images from Dataset 
 6. Plot misclassified images 
+7. Plot Confusion Matrix
 
 You may read the instructions below or use the [test notebook](https://github.com/ravindrabharathi/tf_utils/blob/master/test/tf_utils_test.ipynb) to try out the various steps 
 
@@ -86,6 +87,12 @@ vz.plot_cifar10_files(train_ds)
 ```
 res=vz.get_misclassified_images(model,test_ds)
 vz.plot_misclassified_images(res[0],res[1],res[2],res[3],52)
+```
+
+### plot confusion matrix 
+```
+vz.plot_confusion_matrix(model,test_ds)
+
 ```
 
 #### Note : 
