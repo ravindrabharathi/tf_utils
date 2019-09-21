@@ -301,8 +301,8 @@ def get_tf_dataset_in_batches(recordstype='train', batch_size=128, shuffle=False
 
 #create train data 
 @timer
-def get_train_ds(batch_size=128):
-    train_ds = get_tf_dataset_in_batches('train', batch_size, True,True)
+def get_train_ds(batch_size=128,shuffle=True,distort=True):
+    train_ds = get_tf_dataset_in_batches('train', batch_size, shuffle,distort)
     return train_ds
 
 #create test data
