@@ -29,14 +29,14 @@ def cutout(img, prob=100, size=8, min_size=5, use_fixed_size=True):
 
 
 
-def get_cutout(img,prob=50,size=8,min_size=5,use_fixed_size=True):
+def get_cutout(img,prob=50,size=8,min_size=2,use_fixed_size=True):
   
   shp=tf.shape(img)
   
   
   height = width = tf.shape(img)[1]
   
-  channel = 3
+  channel = tf.shape(img)[-1]
   
   
 
@@ -51,11 +51,11 @@ def get_cutout(img,prob=50,size=8,min_size=5,use_fixed_size=True):
   
   # create the cutout slice and the mask 
   img1 = tf.ones_like(img)  
-  print(tf.shape(img1))
+  #print(tf.shape(img1))
   cut_slice = tf.slice(
   img1,
   [0,x1, y1, 0],
-  [shp[0],s, s, 3]
+  [shp[0],s, s, channel]
      )
   
   
