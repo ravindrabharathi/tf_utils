@@ -29,7 +29,8 @@ def pad_img(image,padding=4):
 def pad_rotate_img(image,padding=4,rotation=10):
   
   image=pad_img(image,padding)
-  angle=math.radians(random.randint(-1*rotation,rotation))
+  angle=0.017453292519943295*(tf.random.uniform([], -1*rotation, rotation, tf.float32))
+  #angle=math.radians(random.randint(-1*rotation,rotation))
   image = tf.map_fn(lambda img:tfa.image.transform_ops.rotate(img, angle),image)
   shp=image.get_shape().as_list()
   central_fraction=((shp[1]-2*padding)/shp[1])
