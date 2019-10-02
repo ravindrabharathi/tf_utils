@@ -225,7 +225,7 @@ def parse_batch_distort(batch_of_records):
 
 
 #function to parse a single record and prepare an image/label set for training / evaluation
-def parse_record(im_example):
+def parse_record(im_example,distort,distort_fn):
     record = tf.io.parse_single_example(im_example, rec_features)
     
     image = tf.io.decode_raw(record['image'], tf.uint8)
@@ -234,15 +234,18 @@ def parse_record(im_example):
     #image = tf.reshape(image,[32,32,3]) #check this ..this doesn't seem to give the right image 
     image = tf.cast(image,tf.float32)
     #augment image if needed
-    #send image to augment fn here 
-    #image=aug_fn(image)
-    ##
+    if distort and (distort_fn != None):
+      print('distorting...')
+    
+      image = distort_fn(image)
 
     label = tf.cast(record['label'], tf.int32)
     label = tf.one_hot(label, num_classes)
 
     return image, label
-
+  
+  
+  
 #function to create train and eval datasets 
 @timer
 def create_train_eval_datasets():
@@ -280,6 +283,35 @@ def get_tf_dataset(recordsfile, batch_size, shuffle=False,distort=False):
   dataset = dataset.prefetch(buffer_size=1)
   
   return dataset
+
+#function to create dataset from tfrecords
+@timer
+def get_tf_dataset_2(recordsfile, batch_size, shuffle=False,distort=False, distort_fn=None):
+  #create dataset from tfrecords file  
+  files=tf.data.Dataset.list_files(recordsfile)
+  dataset = files.interleave(tf.data.TFRecordDataset,cycle_length=4)
+  #shuffle 
+  if shuffle:
+    dataset = dataset.shuffle(buffer_size=10*batch_size)
+  #repeat
+  dataset = dataset.repeat()
+  
+  #parse the records - map to parse function
+  #setting num_parallel_calls to a value much greater than the number of available CPUs 
+  #can lead to inefficient scheduling, resulting in a slowdown
+  dataset = dataset.map(map_func=lambda record: parse_record(record, distort, distort_fn),num_parallel_calls=CPU_CORES)
+
+
+  #although the following link says batch before map is recommended for speed, some tf2 image functions don't seem to handle batches optimally
+  #also many tf2 references do map before batch 
+  #refer https://stackoverflow.com/questions/50781373/using-feed-dict-is-more-than-5x-faster-than-using-dataset-api
+  #so we map and then batch here 
+  # batch the records
+  dataset = dataset.batch(batch_size=batch_size)  
+  #prefetch elements from the input dataset ahead of the time they are requested
+  dataset = dataset.prefetch(buffer_size=1)
+  
+  return dataset 
 
 #create dataset and return an iterator for dataset 
 @timer
