@@ -1,5 +1,8 @@
 
 import tensorflow as tf
+import tensorflow_addons as tfa
+import math
+import random
 
 ###
 #TRANSFORM FUNCTIONS
@@ -12,6 +15,31 @@ def center_pad_crop(image,padding=4):
   image=tf.image.central_crop(image,central_fraction)
 
   return image
+
+def pad_img(image,padding=4):
+  shp=tf.shape(image)
+  num_dim=len(image.get_shape().as_list())
+  if num_dim==4:
+    image=tf.pad(image,[(0, 0), (padding, padding), (padding, padding), (0, 0)], mode='reflect')
+  else:
+    image=tf.pad(image,[ (padding, padding), (padding, padding), (0, 0)], mode='reflect')
+  
+  return image
+
+def pad_rotate_img(image,padding=4,rotation=10):
+  image=pad_img(image,padding)
+  angle=math.radians(random.randint(-1*rotation,rotation))
+  image = tf.map_fn(lambda img:tfa.image.transform_ops.rotate(img, math.radians(degree)),image)
+  central_fraction=((tf.shape(image)[1]-2*padding)/tf.shape(image)[1])
+  
+  image=tf.image.central_crop(image,central_fraction)
+
+  return image
+
+def random_crop(image,out_shape):
+  
+  return tf.image.random_crop(image,size=out_shape)
+  
 
 def random_pad_crop(image,padding=4):
   shp=tf.shape(image)
