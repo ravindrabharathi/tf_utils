@@ -315,14 +315,17 @@ def get_tf_dataset_2(recordsfile, batch_size, shuffle=False,distort=False, disto
 
 #create dataset and return an iterator for dataset 
 @timer
-def get_tf_dataset_in_batches(recordstype='train', batch_size=128, shuffle=False,distort=False):
+def get_tf_dataset_in_batches(recordstype='train', batch_size=128, shuffle=False,distort=False,distort_fn=None):
   #switch file name based on train or test data
   if recordstype == 'train':
     recordsfile = './train.tfrecords'
   else:
     recordsfile = './eval.tfrecords'
   #create dataset 
-  dataset = get_tf_dataset(recordsfile, batch_size,shuffle,distort)
+  if distort_fn ==None:
+    dataset = get_tf_dataset(recordsfile, batch_size,shuffle,distort)
+  else:
+    dataset = get_tf_dataset_2(recordsfile, batch_size,shuffle,distort,distort_fn)
   # tf version is 2 return dataset , else return an iterator 
   if (int(str(tf.__version__)[:1])<2):
     #create an iterator for the dataset   
@@ -333,10 +336,11 @@ def get_tf_dataset_in_batches(recordstype='train', batch_size=128, shuffle=False
 
 #create train data 
 @timer
-def get_train_ds(batch_size=128,shuffle=True,distort=True):
-    train_ds = get_tf_dataset_in_batches('train', batch_size, shuffle,distort)
+def get_train_ds(batch_size=128,shuffle=True,distort=True,distort_fn=None):
+    train_ds = get_tf_dataset_in_batches('train', batch_size, shuffle,distort,distort_fn)
     return train_ds
-
+  
+  
 #create test data
 @timer
 def get_eval_ds(batch_size=128):
