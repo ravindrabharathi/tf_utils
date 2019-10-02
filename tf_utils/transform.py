@@ -15,7 +15,7 @@ def center_pad_crop(image,padding=4):
 
 def random_pad_crop(image,padding=4):
   shp=tf.shape(image)
-  num_dim=len(img.get_shape().as_list())
+  num_dim=len(image.get_shape().as_list())
   if num_dim==4:
     image=tf.pad(image,[(0, 0), (padding, padding), (padding, padding), (0, 0)], mode='reflect')
   else:
