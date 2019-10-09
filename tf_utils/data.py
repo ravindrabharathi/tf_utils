@@ -30,6 +30,15 @@ batch_size=128
 class_names = ['airplane','automobile','bird','cat','deer',
                'dog','frog','horse','ship','truck']
 
+##for cifar100 ##
+
+class_names_cifar_100=[]
+
+tar_cifar_100="cifar-100-python.tar.gz"
+url_cifar_100="https://www.cs.toronto.edu/~kriz/" +tar_cifar_100
+
+###
+
 #import tf if not defined 
 try:
   tf
@@ -84,6 +93,15 @@ def download_cifar10_files():
     else:
         print('dataset archive file exists!')
 
+#download cifar100 data
+@timer
+def download_cifar100_files():
+    path = './'
+    if tar_cifar_100 not in os.listdir(path):
+        download_file(url_cifar_100, tar_cifar_100)
+    else:
+        print('dataset archive file exists!')        
+        
 #extract cifar 10 data files downloaded archive 
 @timer
 def extract_cifar10_files():
@@ -94,14 +112,31 @@ def extract_cifar10_files():
     else:
         tarfile.open(tar, 'r:gz').extractall(data)
         print('Done')
+        
+        
+#extract cifar 100 data files downloaded archive 
+@timer
+def extract_cifar100_files():
+    data = './cifar100_data/'
+    if os.path.exists(data + 'cifar-100-python/test'):
+        print(data + 'cifar-100-python/', 'is not empty and has test_batch file!')
 
+    else:
+        tarfile.open(tar_cifar_100, 'r:gz').extractall(data)
+        print('Done')                
+        
+        
 #get filenames in cifar 10 data and split them as train and eval set 
 @timer
-def _get_file_names():
+def _get_file_names(dataset='cifar10'):
     """Returns the file names expected to exist in the input_dir."""
     file_names = {}
-    file_names['train'] = ['data_batch_%d' % i for i in xrange(1, 6)]
-    file_names['eval'] = ['test_batch']
+    if dataset=='cifar10':
+      file_names['train'] = ['data_batch_%d' % i for i in xrange(1, 6)]
+      file_names['eval'] = ['test_batch']
+    else:
+      file_names['train'] = ['train'] 
+      file_names['eval'] = ['test'] 
     return file_names
 
 #read the data files 
@@ -134,7 +169,10 @@ def convert_to_tfrecord(input_files, output_file):
             # print(input_file)
             data_dict = read_pickle_from_file(input_file)
             data = data_dict[b'data']
-            labels = data_dict[b'labels']
+            if dataset=='cifar10':
+              labels = data_dict[b'labels']
+            else:
+              labels=data_dict[b'fine_labels']
             num_entries_in_batch = len(labels)
             # print(num_entries_in_batch)
 
@@ -148,10 +186,10 @@ def convert_to_tfrecord(input_files, output_file):
 
 #function to check if tfrecords exist , else create them 
 @timer
-def create_tf_records(data_dir='./cifar10_data', output_dir='./', overwrite=False):
+def create_tf_records(data_set='cifar10',data_dir='./cifar10_data', output_dir='./', input_dir='cifar-10-batches-py', overwrite=False):
     file_names = _get_file_names()
 
-    input_dir = os.path.join(data_dir, 'cifar-10-batches-py')
+    input_dir = os.path.join(data_dir, input_dir)
     for mode, files in file_names.items():
         input_files = [os.path.join(input_dir, f) for f in files]
         output_file = mode + '.tfrecords'
@@ -174,6 +212,18 @@ def get_cifar10_and_create_tfrecords():
     extract_cifar10_files()
     create_tf_records()
 
+# putting it all together cifar100-- download data and create tfrecords 
+@timer
+def get_cifar100_and_create_tfrecords():
+    global num_classes
+    global class_names_cifar_100
+    num_classes=100
+    download_cifar100_files()
+    extract_cifar100_files()
+    meta = read_pickle_from_file('./cifar100_data/cifar-100-python/meta')
+    class_names_cifar_100=[t.decode('utf8') for t in meta[b'fine_label_names']]
+    create_tf_records(data_set='cifar100',data_dir='./cifar100_data', output_dir='./', input_dir='cifar-100-python')      
+    
 ###
 #FUNCTIONS TO READ TFRECORDS AND CREATE DATASETS  
 ###   
