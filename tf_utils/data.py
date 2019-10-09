@@ -161,7 +161,7 @@ def _bytes_feature(value):
 
 #convert downloaded data files to tfrecords 
 @timer
-def convert_to_tfrecord(input_files, output_file):
+def convert_to_tfrecord(input_files, output_file,dataset='cifar10'):
     """Converts a file to TFRecords."""
     print('Generating %s' % output_file)
     with tf.io.TFRecordWriter(output_file) as record_writer:
