@@ -187,7 +187,7 @@ def convert_to_tfrecord(input_files, output_file):
 #function to check if tfrecords exist , else create them 
 @timer
 def create_tf_records(data_set='cifar10',data_dir='./cifar10_data', output_dir='./', input_dir='cifar-10-batches-py', overwrite=False):
-    file_names = _get_file_names()
+    file_names = _get_file_names(dataset)
 
     input_dir = os.path.join(data_dir, input_dir)
     for mode, files in file_names.items():
