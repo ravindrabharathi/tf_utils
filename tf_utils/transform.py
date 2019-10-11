@@ -1,6 +1,6 @@
 
 import tensorflow as tf
-import tensorflow_addons as tfa
+#import tensorflow_addons as tfa
 import math
 import random
 
@@ -26,6 +26,7 @@ def pad_img(image,padding=4):
   
   return image
 
+'''
 def pad_rotate_img(image,padding=4,rotation=10):
   
   image=pad_img(image,padding)
@@ -38,6 +39,7 @@ def pad_rotate_img(image,padding=4,rotation=10):
   image=tf.image.central_crop(image,central_fraction)
 
   return image
+'''
 
 def random_crop(image,out_shape):
   
