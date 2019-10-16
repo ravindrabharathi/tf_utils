@@ -50,8 +50,8 @@ else:
 
 #for tf2 eager execution is enabled by default 
 # for lower versions enable eager execution
-if (int(str(tf.__version__)[:1])<2):
-  tf.compat.v1.enable_eager_execution()
+#if (int(str(tf.__version__)[:1])<2):
+  #tf.compat.v1.enable_eager_execution()
 
 #get the cpu cores on current env 
 CPU_CORES=get_cpu_num() #get_cpu_cores()  
