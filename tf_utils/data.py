@@ -376,6 +376,7 @@ def get_tf_dataset_in_batches(recordstype='train', batch_size=128, shuffle=False
     dataset = get_tf_dataset(recordsfile, batch_size,shuffle,distort)
   else:
     dataset = get_tf_dataset_2(recordsfile, batch_size,shuffle,distort,distort_fn)
+  '''  
   # tf version is 2 return dataset , else return an iterator 
   if (int(str(tf.__version__)[:1])<2):
     #create an iterator for the dataset   
@@ -383,6 +384,9 @@ def get_tf_dataset_in_batches(recordstype='train', batch_size=128, shuffle=False
     return iterator
   else:
     return dataset
+  '''
+  #model fit requires a dataset , not an iter(dataset) 
+  return dataset 
 
 #create train data 
 @timer
