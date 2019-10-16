@@ -5,6 +5,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn.utils.multiclass import unique_labels
 
 #function to plot n images from dataset
+@tf.function
 def plot_cifar10_files(dataset,n=5):
   import matplotlib.pyplot as plt
   records=dataset.take(1)
@@ -20,6 +21,7 @@ def plot_cifar10_files(dataset,n=5):
       plt.show()
       
 #function to get misclssified images
+@tf.function
 def get_misclassified_images(model,test_ds):
   num_steps=np.ceil(10000/batch_size)
   pred=model.predict(test_ds,steps =num_steps, verbose=1)
