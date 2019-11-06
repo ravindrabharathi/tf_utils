@@ -397,6 +397,6 @@ def get_train_ds(batch_size=128,shuffle=True,distort=True,distort_fn=None):
   
 #create test data
 @timer
-def get_eval_ds(batch_size=128):
-    test_ds = get_tf_dataset_in_batches('test', batch_size)
+def get_eval_ds(batch_size=128,shuffle=False,distort=False,distort_fn=None):
+    test_ds = get_tf_dataset_in_batches('test', batch_size,shuffle,distort,distort_fn)
     return test_ds
