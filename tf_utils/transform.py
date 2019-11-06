@@ -172,5 +172,9 @@ def get_cutout_2(img,prob=50,size=8,min_size=2,use_fixed_size=True):
    
   return cut_img
 
+def resize_img(img,size):
+  return tf.image.resize_images(img,size,method=tf.image.ResizeMethod.BICUBIC)
+
+
 def aug1(image):
   return cutout(flip_left_right(random_pad_crop(image)))
