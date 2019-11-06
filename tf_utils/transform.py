@@ -177,7 +177,7 @@ def resize_img(img,size):
   return tf.image.resize(img,size,method=tf.image.ResizeMethod.BICUBIC) # todo - check tf version and switch to resize_images 
 
 def normalize_img(img,mean,std):
-  return ((img-mean)/std).astype(tf.float32)
+  return ((img/255.0)-mean)/std
 
 
 def aug1(image):
