@@ -173,7 +173,8 @@ def get_cutout_2(img,prob=50,size=8,min_size=2,use_fixed_size=True):
   return cut_img
 
 def resize_img(img,size):
-  return tf.image.resize_images(img,size,method=tf.image.ResizeMethod.BICUBIC)
+  
+  return tf.image.resize(img,size,method=tf.image.ResizeMethod.BICUBIC) # todo - check tf version and switch to resize_images 
 
 def normalize_img(img,mean,std):
   return (img-mean)/std
