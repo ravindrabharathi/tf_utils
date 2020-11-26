@@ -1,19 +1,17 @@
 # tf_utils
 Utility package for training CNN using tensorflow2, TFRecords, tf.data
 Supports the following
-1. Download dataset (cifar10 for now..more will be added) from source url
-2. Store the Dataset as TFRecords
+1. Create tfrecords for deepweeds dataset https://github.com/AlexOlsen/DeepWeeds
+2. Save TFRecords for Train, eval and Test sets 
 3. Retreve image data as tf.data.TFRecordDataset
 4. Image Augmentation (random-pad_crop, flip-left_right, cutout) of Image Batches
 5. Plot images from Dataset 
 6. Plot misclassified images 
 7. Plot Confusion Matrix
 
-You may read the instructions below or use the [test notebook](https://github.com/ravindrabharathi/tf_utils/blob/master/test/tf_utils_test.ipynb) to try out the various steps 
-
 ### Installation
 ```
-!pip install --upgrade git+https://github.com/ravindrabharathi/tf_utils
+!pip install --upgrade git+https://github.com/ravindrabharathi/tf_utils@deepweeds 
 ```
  
 
@@ -27,7 +25,7 @@ You may read the instructions below or use the [test notebook](https://github.co
 ```
  ds.batch_size=128
 
- ds.get_cifar10_and_create_tfrecords()
+ ds.create_tfrecords()
  ```
 
 ### create datasets for training 
@@ -48,20 +46,41 @@ The data module calls the following augmentation for training dataset image batc
 ### training
 ```
 #build model 
-model=build_model()
-#compile model
-model.compile(loss='categorical_crossentropy',
-              optimizer='adam',metrics=['accuracy']
-              )
+img_size=256
+  
+input_layer=Input(shape=(img_size,img_size,3))
+base_model=ResNet50(weights='imagenet',include_top=False,input_tensor=input_layer)
+
+x = base_model.output
+x = GlobalAveragePooling2D()(x)
+# let's add a fully-connected layer
+x = Dense(1024, activation='relu')(x)
+x = Dropout(0.15)(x)
+x = Dense(512, activation='relu')(x)
+# and a logistic layer -- let's say we have 200 classes
+predictions = Dense(num_classes, activation='softmax')(x)
+
+# this is the model we will train
+model = Model(inputs=base_model.input, outputs=predictions)
+
+# first: train only the top layers (which were randomly initialized)
+# i.e. freeze all convolutional Resnet50 layers
+for layer in base_model.layers:
+    layer.trainable = False
+
+opt=SGD(lr=0.01,momentum=0.9,nesterov=True)
+# compile the model (should be done *after* setting layers to non-trainable)
+model.compile(optimizer=opt, loss='categorical_crossentropy',metrics=['accuracy'])
 #train model 
 
 import numpy as np
-batch_size=128
-training_steps=np.ceil(50000/batch_size)
-test_steps=np.ceil(10000/batch_size)
-model.fit(train_ds,epochs=25, steps_per_epoch=training_steps, 
-          validation_data=test_ds, validation_steps=test_steps,
-          verbose=1)
+EPOCHS=10
+#callback_list=[lr_sched,model_cpt]
+model.fit(train_ds, epochs=EPOCHS, 
+                        steps_per_epoch=np.ceil(len(train_df1)//batch_size), 
+                    validation_data=val_ds,
+                    validation_steps=np.ceil(len(val_df)//batch_size), 
+                    shuffle=True,verbose=1)
           
 ```
 ### evaluate model 
@@ -78,25 +97,13 @@ print('Test accuracy:', score[1])
 ```
 import tf_utils.visualize as vz
 ```
-### plot images from training data
-```
-vz.plot_cifar10_files(train_ds)
-```
-
-### plot misclassified images
-```
-res=vz.get_misclassified_images(model,test_ds)
-vz.plot_misclassified_images(res[0],res[1],res[2],res[3],52)
-```
-
-### plot confusion matrix 
-```
-vz.plot_confusion_matrix(model,test_ds)
+--to be added---
 
 ```
 
 #### Note : 
-In order to use tensorflow2 on colab , you may use the following code to select tf2 on colab
+On Colab tf defaults to tensorflow2 
+if not , In order to use tensorflow2 on colab , you may use the following code to select tf2 on colab
 ```
 from __future__ import absolute_import, division, print_function, unicode_literals
 
