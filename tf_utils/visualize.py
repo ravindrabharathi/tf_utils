@@ -172,3 +172,58 @@ def plot_confusion_matrix(model,test_ds):
                     ha="center", va="center",
                     color="white" if c_matrix[i, j] > thresh else "black")
   fig.tight_layout()    
+
+def visualize_data(data_df):
+  print('Class Mapping\n-----------------')
+  class_map=data_df[['Label','Species']]
+  class_map=class_map.drop_duplicates()
+  class_map=class_map.sort_values(by=['Label']).reset_index(drop=True)
+  print(class_map)
+  print('---------------------\n')
+
+  print('Count per Species\n-----------------')
+
+  vc=data.Species.value_counts().rename_axis('Species').reset_index(name='Total')
+  print(vc)
+  print('---------------------\n')
+  labels=vc.Species
+  fig, ax = plt.subplots(1, 1)
+  species_hist = ax.hist(data_df.Label,bins=9,alpha=0.6,histtype='bar',ec='black',orientation='horizontal',)
+  
+  
+  plt.show()
+  return class_map
+
+
+def show_image_sample(data_df=data,images_dir='./images'):
+  classes=['Chinee apple', 'Lantana', 'Parkinsonia', 'Parthenium', 'Prickly acacia', 'Rubber vine', 'Siam weed','Snake weed', 'Negative']
+  fig, ax = plt.subplots(9,5,sharex=True,figsize=(8, 14))
+  for i in range(9):
+      
+      for j in range(5):
+            
+            
+            if ( j==0 and (i<9) ):
+                plt.setp(ax[i,j].get_xticklabels(), visible=False)
+                ax[i,j].tick_params(axis='x',which='both',bottom=False, top=False,labelbottom=False)
+                ax[i,j].tick_params(axis='y',which='both',left=False, right=False,labelleft=False)
+                
+            else:
+                ax[i,j].axis('off')  
+  for i in range(len(classes)):
+    clazz=classes[i]
+    ax[i,0].set_ylabel(clazz,fontsize=12)
+    df1=data_df[data_df.Species==clazz]
+    files=df1.head().Filename.to_list()
+    for j in range(len(files)):
+      filename=files[j]
+      if images_dir !='':
+        filename=os.path.join(images_dir,filename)
+      img = Image.open(filename)
+      img = np.array(img.resize((256,256)))
+      ax[i,j].imshow(img)
+      
+  plt.tight_layout(pad=2.0) 
+  plt.show()
+
+  
