@@ -6,7 +6,7 @@ from sklearn.utils.multiclass import unique_labels
 from PIL import Image
 
       
-#function to get misclssified images
+#function to get misclssified images ## need to update with correct sample size
 @tf.function
 def get_misclassified_images(model,test_ds,num_steps):
   
@@ -123,8 +123,7 @@ def plot_confusion_matrix(model,test_ds,num_steps,total_samples,class_names):
     else:
       y= np.vstack((y,record[1].numpy()))
       #x= np.vstack((x,record[0].numpy()))
-  print(y.shape)
-  print(pred2.shape)
+  
   y=y[:total_samples]
   pred2=pred2[:total_samples]
   #x=x[:num_steps]
