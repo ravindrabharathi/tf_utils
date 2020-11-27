@@ -21,6 +21,7 @@ from tf_utils.utils import *
 from tf_utils.transform import *
 
 from sklearn.model_selection import train_test_split
+from PIL import Image
 
 
 num_classes=9
