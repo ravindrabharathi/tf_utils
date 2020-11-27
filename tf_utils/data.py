@@ -294,10 +294,12 @@ def get_tf_dataset_in_batches(recordstype='train', batch_size=128, shuffle=False
     dataset = get_tf_dataset_2(recordsfile, batch_size,shuffle,distort,distort_fn)
   # tf version is 2 return dataset , else return an iterator 
   if (int(str(tf.__version__)[:1])<2):
-    #create an iterator for the dataset   
+    #create an iterator for the dataset  
+    print('returning iterator for ',tf.__version__)
     iterator = tf.compat.v1.data.make_one_shot_iterator(dataset)
     return iterator
   else:
+    print('returning dataset for ',tf.__version__)
     return dataset
 
 #create train data 
