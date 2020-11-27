@@ -168,7 +168,7 @@ def visualize_data(data_df):
 
   print('Count per Species\n-----------------')
 
-  vc=data.Species.value_counts().rename_axis('Species').reset_index(name='Total')
+  vc=data_df.Species.value_counts().rename_axis('Species').reset_index(name='Total')
   print(vc)
   print('---------------------\n')
   labels=vc.Species
