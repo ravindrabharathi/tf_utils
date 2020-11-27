@@ -226,7 +226,7 @@ def plot_images_from_ds(dset,title):
                 
         else:
           ax[i,j].axis('off')
-  plt.set_title(title)    
+  fig.suptitle(title)    
   for image,label in dset.take(1):
     for i in range(10):
       j=i//5
