@@ -8,8 +8,8 @@ from PIL import Image
       
 #function to get misclssified images
 @tf.function
-def get_misclassified_images(model,test_ds):
-  num_steps=np.ceil(len(list(test_ds))/batch_size)
+def get_misclassified_images(model,test_ds,num_steps):
+  
   pred=model.predict(test_ds,steps =num_steps, verbose=1)
   pred2=np.argmax(pred,axis=1)
   wrong_set=[]
@@ -109,8 +109,8 @@ def plot_misclassified_images(wrong_indices,wrong_labels,true_labels,wrong_set,n
 
 
 # function to plot confusion matrix
-def plot_confusion_matrix(model,test_ds):  
-  num_steps=np.ceil(len(list(test_ds))/batch_size) ## not a good way to get length , tf 2.3 has dataset.cardinality().numpy()
+def plot_confusion_matrix(model,test_ds,num_steps):  
+  
   pred=model.predict(test_ds,steps =num_steps, verbose=1)
   pred2=np.argmax(pred,axis=1)
   
