@@ -26,8 +26,7 @@ from sklearn.model_selection import train_test_split
 num_classes=9
 batch_size=128
 class_names = ['0','1','2','3','4','5','6','7','8']
-species_names=class_map.to_dict()['Species']
-#print(species_names)
+global species_names
 
 #import tf if not defined 
 try:
@@ -46,7 +45,10 @@ def get_class_map(data_df):
   class_map=data_df[['Label','Species']]
   class_map=class_map.drop_duplicates()
   class_map=class_map.sort_values(by=['Label']).reset_index(drop=True)
+  species_names=class_map.to_dict()['Species']
   return class_map
+
+
 
 # features of a single record , we could add species names too but for now keep it to image and label
 rec_features = {
