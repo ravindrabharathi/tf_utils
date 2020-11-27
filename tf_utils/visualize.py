@@ -185,7 +185,7 @@ def visualize_data(data_df):
 
 def show_image_sample(data_df,images_dir='./images'):
   classes=['Chinee apple', 'Lantana', 'Parkinsonia', 'Parthenium', 'Prickly acacia', 'Rubber vine', 'Siam weed','Snake weed', 'Negative']
-  fig, ax = plt.subplots(9,5,sharex=True,figsize=(8, 20))
+  fig, ax = plt.subplots(9,5,sharex=True,figsize=(8, 19))
   fig.suptitle('Sample Images of Weed Species and Negative Set')    
   for i in range(9):
       
@@ -215,7 +215,7 @@ def show_image_sample(data_df,images_dir='./images'):
   plt.tight_layout(pad=2.0) 
   plt.show()
 
-def plot_images_from_ds(dset,title):
+def plot_images_from_ds(dset,title,species_names):
   fig, ax = plt.subplots(2,5,sharex=True,figsize=(14, 7))
     
   for i in range(2):
