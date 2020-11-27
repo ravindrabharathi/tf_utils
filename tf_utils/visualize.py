@@ -109,24 +109,25 @@ def plot_misclassified_images(wrong_indices,wrong_labels,true_labels,wrong_set,n
 
 
 # function to plot confusion matrix
-def plot_confusion_matrix(model,test_ds,num_steps):  
+def plot_confusion_matrix(model,test_ds,num_steps,total_samples,class_names):  
   
-  pred=model.predict(test_ds,steps =num_steps, verbose=1)
+  pred=model.predict(test_ds,steps=num_steps, verbose=0)
   pred2=np.argmax(pred,axis=1)
   
   c=0
   for record in test_ds.take(num_steps):
     if c==0:
-      x=record[0].numpy()
+      #x=record[0].numpy()
       y=record[1].numpy()
       c+=1
     else:
       y= np.vstack((y,record[1].numpy()))
-      x= np.vstack((x,record[0].numpy()))
-
-  y=y[:num_steps]
-  pred2=pred2[:num_steps]
-  x=x[:num_steps]
+      #x= np.vstack((x,record[0].numpy()))
+  print(y.shape)
+  print(pred2.shape)
+  y=y[:total_samples]
+  pred2=pred2[:total_samples]
+  #x=x[:num_steps]
   y1=np.argmax(y, axis=1)   
   
   c_matrix = metrics.confusion_matrix(y1, pred2)  
