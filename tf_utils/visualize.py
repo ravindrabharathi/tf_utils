@@ -159,25 +159,27 @@ def plot_confusion_matrix(model,test_ds):
   fig.tight_layout()    
 
 def visualize_data(data_df):
-  print('Class Mapping\n-----------------')
-  class_map=data_df[['Label','Species']]
-  class_map=class_map.drop_duplicates()
-  class_map=class_map.sort_values(by=['Label']).reset_index(drop=True)
-  print(class_map)
-  print('---------------------\n')
+      
+      data_df=data_df
+      print('Class Mapping\n-----------------')
+      class_map=data_df[['Label','Species']]
+      class_map=class_map.drop_duplicates()
+      class_map=class_map.sort_values(by=['Label']).reset_index(drop=True)
+      print(class_map)
+      print('---------------------\n')
 
-  print('Count per Species\n-----------------')
+      print('Count per Species\n-----------------')
 
-  vc=data_df.Species.value_counts().rename_axis('Species').reset_index(name='Total')
-  print(vc)
-  print('---------------------\n')
-  labels=vc.Species
-  fig, ax = plt.subplots(1, 1)
-  species_hist = ax.hist(data_df.Label,bins=9,alpha=0.6,histtype='bar',ec='black',orientation='horizontal',)
+      vc=data_df.Species.value_counts().rename_axis('Species').reset_index(name='Total')
+      print(vc)
+      print('---------------------\n')
+      labels=vc.Species
+      fig, ax = plt.subplots(1, 1)
+      species_hist = ax.hist(data_df.Label,bins=9,alpha=0.6,histtype='bar',ec='black',orientation='horizontal',)
   
   
-  plt.show()
-  return class_map
+      plt.show()
+      
 
 
 def show_image_sample(data_df,images_dir='./images'):
