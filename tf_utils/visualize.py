@@ -3,6 +3,7 @@ from sklearn import metrics
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 from sklearn.utils.multiclass import unique_labels
+from PIL import Image
 
       
 #function to get misclssified images
