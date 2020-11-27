@@ -229,8 +229,8 @@ def get_tf_dataset(recordsfile, batch_size, shuffle=False,distort=False):
   if shuffle:
     dataset = dataset.shuffle(buffer_size=10*batch_size)
   #repeat
-  if recordsfile != './tf_train/test.tfrecords':
-    dataset = dataset.repeat()
+  #if recordsfile != './tf_train/test.tfrecords':
+  dataset = dataset.repeat()
   #batch before map is recommended for speed
   #refer https://stackoverflow.com/questions/50781373/using-feed-dict-is-more-than-5x-faster-than-using-dataset-api
   # batch the records
