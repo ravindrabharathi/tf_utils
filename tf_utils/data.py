@@ -23,11 +23,6 @@ from tf_utils.transform import *
 from sklearn.model_selection import train_test_split
 
 
-
-
-
-
-
 num_classes=9
 batch_size=128
 class_names = ['0','1','2','3','4','5','6','7','8']
@@ -42,7 +37,10 @@ except NameError:
 else:
     pass
 
-
+def get_train_val_test_df(data_df):
+  train_df, test_df = train_test_split(data_df, test_size=0.2,shuffle=True,random_state=42)
+  train_df1, val_df = train_test_split(train_df, test_size=0.25,shuffle=True,random_state=42)
+  return train_df1,val_df,test_df
 
 # features of a single record , we could add species names too but for now keep it to image and label
 rec_features = {
