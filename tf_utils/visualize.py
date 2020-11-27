@@ -214,4 +214,26 @@ def show_image_sample(data_df,images_dir='./images'):
   plt.tight_layout(pad=2.0) 
   plt.show()
 
-  
+def plot_images_from_ds(dset):
+  fig, ax = plt.subplots(2,5,sharex=True,figsize=(14, 7))
+    
+  for i in range(2):
+      for j in range(5):
+        if ( j==0 and (i==0 or i==1) ):
+          plt.setp(ax[i,j].get_xticklabels(), visible=False)
+          ax[i,j].tick_params(axis='x',which='both',bottom=False, top=False,labelbottom=False)
+          ax[i,j].tick_params(axis='y',which='both',left=False, right=False,labelleft=False)
+                
+        else:
+          ax[i,j].axis('off')
+
+  for image,label in dset.take(1):
+    for i in range(10):
+      j=i//5
+      k=i%5
+      img=image[i]
+      lbl=label[i]
+      ax[j,k].imshow(img/255.0)
+      ax[j,k].set_title(species_names[np.argmax(lbl)])
+  plt.tight_layout(pad=3.0)    
+  plt.show()
