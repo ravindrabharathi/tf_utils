@@ -26,7 +26,7 @@ from sklearn.model_selection import train_test_split
 num_classes=9
 batch_size=128
 class_names = ['0','1','2','3','4','5','6','7','8']
-global species_names
+global species_names,train_df1,val_df,test_df
 
 #import tf if not defined 
 try:
