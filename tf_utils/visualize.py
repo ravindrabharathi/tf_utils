@@ -180,7 +180,7 @@ def visualize_data(data_df):
   return class_map
 
 
-def show_image_sample(data_df=data,images_dir='./images'):
+def show_image_sample(data_df,images_dir='./images'):
   classes=['Chinee apple', 'Lantana', 'Parkinsonia', 'Parthenium', 'Prickly acacia', 'Rubber vine', 'Siam weed','Snake weed', 'Negative']
   fig, ax = plt.subplots(9,5,sharex=True,figsize=(8, 14))
   for i in range(9):
