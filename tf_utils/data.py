@@ -41,12 +41,12 @@ def get_train_val_test_df(data_df):
   train_df1, val_df = train_test_split(train_df, test_size=0.25,shuffle=True,random_state=42)
   return train_df1,val_df,test_df
 
-def get_class_map(data_df):
+def get_class_map_and_species_names(data_df):
   class_map=data_df[['Label','Species']]
   class_map=class_map.drop_duplicates()
   class_map=class_map.sort_values(by=['Label']).reset_index(drop=True)
   species_names=class_map.to_dict()['Species']
-  return class_map
+  return class_map,species_names
 
 
 
