@@ -124,7 +124,7 @@ def plot_misclassified_images(wrong_indices,wrong_labels,true_labels,wrong_set,n
 
 # function to plot confusion matrix
 def plot_confusion_matrix(model,test_ds):  
-  num_steps=np.ceil(10000/batch_size)
+  num_steps=np.ceil(len(list(test_ds))/batch_size) ## not a good way to get length , tf 2.3 has dataset.cardinality().numpy()
   pred=model.predict(test_ds,steps =num_steps, verbose=1)
   pred2=np.argmax(pred,axis=1)
   
@@ -138,9 +138,9 @@ def plot_confusion_matrix(model,test_ds):
       y= np.vstack((y,record[1].numpy()))
       x= np.vstack((x,record[0].numpy()))
 
-  y=y[:10000]
-  pred2=pred2[:10000]
-  x=x[:10000]
+  y=y[:num_steps]
+  pred2=pred2[:num_steps]
+  x=x[:num_steps]
   y1=np.argmax(y, axis=1)   
   
   c_matrix = metrics.confusion_matrix(y1, pred2)  
