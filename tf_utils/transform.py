@@ -36,7 +36,7 @@ def random_crop(image,out_shape=(224,224,3)):
   shp=tf.shape(image)
   num_dim=len(image.get_shape().as_list())
   if num_dim==4:
-    out_shape=(shp[0],224,244,3)
+    out_shape=(shp[0],224,224,3)
   return tf.image.random_crop(image,size=out_shape)
   
 
