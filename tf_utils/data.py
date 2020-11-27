@@ -37,6 +37,7 @@ else:
     pass
 
 def get_train_val_test_df(data_df):
+  global train_df1,val_df,test_df
   train_df, test_df = train_test_split(data_df, test_size=0.2,shuffle=True,random_state=42)
   train_df1, val_df = train_test_split(train_df, test_size=0.25,shuffle=True,random_state=42)
   return train_df1,val_df,test_df
