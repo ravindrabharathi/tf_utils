@@ -8,7 +8,11 @@ import random
 #TRANSFORM FUNCTIONS
 ###
 
-def center_pad_crop(image,padding=4):
+#imagenet mean and std
+mean = [0.485, 0.456, 0.406]
+std = [0.229, 0.224, 0.225]
+
+def center_pad_crop(image,padding=28):
   image=tf.pad(image,[(0, 0), (padding, padding), (padding, padding), (0, 0)], mode='reflect')
   central_fraction=((tf.shape(image)[1]-2*padding)/tf.shape(image)[1])
   print(central_fraction)
@@ -16,7 +20,7 @@ def center_pad_crop(image,padding=4):
 
   return image
 
-def pad_img(image,padding=4):
+def pad_img(image,padding=28):
   shp=tf.shape(image)
   num_dim=len(image.get_shape().as_list())
   if num_dim==4:
@@ -26,25 +30,17 @@ def pad_img(image,padding=4):
   
   return image
 
-def pad_rotate_img(image,padding=4,rotation=10):
-  
-  image=pad_img(image,padding)
-  angle=0.017453292519943295*(tf.random.uniform([], -1*rotation, rotation, tf.float32))
-  #angle=math.radians(random.randint(-1*rotation,rotation))
-  image = tf.map_fn(lambda img:tfa.image.transform_ops.rotate(img, angle),image)
-  shp=image.get_shape().as_list()
-  central_fraction=((shp[1]-2*padding)/shp[1])
-  
-  image=tf.image.central_crop(image,central_fraction)
 
-  return image
 
-def random_crop(image,out_shape):
-  
+def random_crop(image,out_shape=(224,224,3)):
+  shp=tf.shape(image)
+  num_dim=len(image.get_shape().as_list())
+  if num_dim==4:
+    out_shape=(shp[0],224,244,3)
   return tf.image.random_crop(image,size=out_shape)
   
 
-def random_pad_crop(image,padding=4):
+def random_pad_crop(image,padding=28):
   shp=tf.shape(image)
   num_dim=len(image.get_shape().as_list())
   if num_dim==4:
@@ -59,7 +55,7 @@ def random_pad_crop(image,padding=4):
 def flip_left_right(image):
   return tf.image.random_flip_left_right(image)
 
-def cutout(img, prob=100, size=8, min_size=5, use_fixed_size=True):
+def cutout(img, prob=100, size=56, min_size=14, use_fixed_size=True):
   num_dim=len(img.get_shape().as_list())
   if num_dim==4:
     return tf.cond(tf.random.uniform([], 0, 100) > prob, lambda: img , lambda: get_cutout(img,prob,size,min_size,use_fixed_size))
@@ -67,7 +63,7 @@ def cutout(img, prob=100, size=8, min_size=5, use_fixed_size=True):
     return tf.cond(tf.random.uniform([], 0, 100) > prob, lambda: img , lambda: get_cutout_2(img,prob,size,min_size,use_fixed_size))
   
 #for batch of images 
-def get_cutout(img,prob=50,size=8,min_size=2,use_fixed_size=True):
+def get_cutout(img,prob=50,size=56,min_size=14,use_fixed_size=True):
   
   shp=tf.shape(img)
   
@@ -119,7 +115,7 @@ def get_cutout(img,prob=50,size=8,min_size=2,use_fixed_size=True):
   return cut_img 
 
 #for single image
-def get_cutout_2(img,prob=50,size=8,min_size=2,use_fixed_size=True):
+def get_cutout_2(img,prob=50,size=56,min_size=14,use_fixed_size=True):
   
   shp=tf.shape(img)
   
@@ -170,5 +166,19 @@ def get_cutout_2(img,prob=50,size=8,min_size=2,use_fixed_size=True):
    
   return cut_img
 
+def resize_img(img,size):
+  if (int(str(tf.__version__)[:1])<2):
+    tf.image.resize_images(img,size,method=tf.image.ResizeMethod.BICUBIC)
+  else:
+    return tf.image.resize(img,size,method=tf.image.ResizeMethod.BICUBIC) 
+
+def normalize_img(img,mean=mean,std=std):
+  return ((img/255.0)-mean)/std
+
+def normalize_img2(img,mean,std):
+  return img/255.0
+
+
 def aug1(image):
-  return cutout(flip_left_right(random_pad_crop(image)))
+  #return cutout(flip_left_right(random_pad_crop(image)))
+  return cutout(flip_left_right(image))
