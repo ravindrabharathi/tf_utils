@@ -214,7 +214,7 @@ def show_image_sample(data_df,images_dir='./images'):
   plt.tight_layout(pad=2.0) 
   plt.show()
 
-def plot_images_from_ds(dset):
+def plot_images_from_ds(dset,title):
   fig, ax = plt.subplots(2,5,sharex=True,figsize=(14, 7))
     
   for i in range(2):
@@ -226,7 +226,7 @@ def plot_images_from_ds(dset):
                 
         else:
           ax[i,j].axis('off')
-
+  plt.set_title(title)    
   for image,label in dset.take(1):
     for i in range(10):
       j=i//5
