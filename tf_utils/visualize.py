@@ -4,26 +4,11 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 from sklearn.utils.multiclass import unique_labels
 
-#function to plot n images from dataset
-@tf.function
-def plot_cifar10_files(dataset,n=5):
-  import matplotlib.pyplot as plt
-  records=dataset.take(1)
-  #print(records)
-
-  for record in records:
-    image_batch,label_batch=record
-    
-    image_batch=image_batch.numpy()
-    for i in range(n):
-      
-      plt.imshow(image_batch[i].astype('uint8'))
-      plt.show()
       
 #function to get misclssified images
 @tf.function
 def get_misclassified_images(model,test_ds):
-  num_steps=np.ceil(10000/batch_size)
+  num_steps=np.ceil(len(list(test_ds))/batch_size)
   pred=model.predict(test_ds,steps =num_steps, verbose=1)
   pred2=np.argmax(pred,axis=1)
   wrong_set=[]
@@ -43,10 +28,10 @@ def get_misclassified_images(model,test_ds):
     else:
       y= np.vstack((y,record[1].numpy()))
       x= np.vstack((x,record[0].numpy()))
-  y=y[:10000]
-  pred2=pred2[:10000]
+  y=y[:num_steps]
+  pred2=pred2[:num_steps]
   x=x[:10000]
-  for i in range(10000):
+  for i in range(num_steps):
     y1=np.argmax(y[i])
     if pred2[i]==y1:
       correct_set.append(x[i])
@@ -68,7 +53,7 @@ def displayRow(images,titles):
   if n<4:
     for j in range(m):
       
-      dummy_image=(np.ones([32,32,3]))
+      dummy_image=(np.ones([256,256,3]))
       dummy_image=dummy_image*255
       images.append(dummy_image)
       titles.append('')
