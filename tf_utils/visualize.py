@@ -1,6 +1,7 @@
 from tf_utils.data import *
 from sklearn import metrics
 import matplotlib.pyplot as plt
+import sklearn.metrics as metrics
 from sklearn.metrics import confusion_matrix
 from sklearn.utils.multiclass import unique_labels
 from PIL import Image
@@ -238,3 +239,29 @@ def plot_images_from_ds(dset,title,species_names):
       ax[j,k].set_title(species_names[np.argmax(lbl)])
   plt.tight_layout(pad=3.0)    
   plt.show()
+
+
+def print_classification_report(model,test_ds,num_steps,total_samples,class_names,label_array,target_names):  
+  
+  pred=model.predict(test_ds,steps=num_steps, verbose=0)
+  pred2=np.argmax(pred,axis=1)
+  
+  c=0
+  for record in test_ds.take(num_steps):
+    if c==0:
+      
+      y=record[1].numpy()
+      c+=1
+    else:
+      y= np.vstack((y,record[1].numpy()))
+      
+  
+  y=y[:total_samples]
+  pred2=pred2[:total_samples]
+  #x=x[:num_steps]
+  y1=np.argmax(y, axis=1) 
+  report = metrics.classification_report(y1,pred2,labels=label_array,target_names=target_names)   
+  print('Classification Report\n-------------------------')
+  print(report)
+  print('\n----------------------\n\n')      
+      
