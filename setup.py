@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='tf_utils',
-      version='0.04',
+      version='0.05',
       description='utilities for tf2',
       url='https://github.com/ravindrabharathi/tf_utils',
       author='ravindrabharathi',
