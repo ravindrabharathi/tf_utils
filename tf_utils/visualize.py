@@ -201,8 +201,8 @@ def show_image_sample(data_df,images_dir='./images'):
   for i in range(len(classes)):
     clazz=classes[i]
     ax[i,0].set_ylabel(clazz,fontsize=12)
-    df1=data_df[data_df.Species==clazz]
-    files=df1.head().Filename.to_list()
+    df1=data_df[data_df.label==clazz]
+    files=df1.head().image_id.to_list()
     for j in range(len(files)):
       filename=files[j]
       if images_dir !='':
