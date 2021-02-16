@@ -69,9 +69,9 @@ rec_features = {
 def _get_file_names():
     """Returns the file names expected to exist in the input_dir."""
     file_names = {}
-    file_names['train'] = list(zip(train_df1.Filename, train_df1.Label))
-    file_names['eval'] = list(zip(val_df.Filename, val_df.Label))
-    file_names['test'] = list(zip(test_df.Filename, test_df.Label))
+    file_names['train'] = list(zip(train_df1.image_id, train_df1.label))
+    file_names['eval'] = list(zip(val_df.image_id, val_df.label))
+    #file_names['test'] = list(zip(test_df.Filename, test_df.Label))
     
     return file_names
 
@@ -217,12 +217,12 @@ def parse_record(im_example,distort,distort_fn):
 def create_train_eval_datasets():
     train_records = tf.data.TFRecordDataset('./train.tfrecords')
     eval_records = tf.data.TFRecordDataset('./eval.tfrecords')
-    test_records = tf.data.TFRecordDataset('./test.tfrecords')
+    #test_records = tf.data.TFRecordDataset('./test.tfrecords')
     train_dataset = train_records.map(_parse_record_function)
     eval_dataset = eval_records.map(_parse_record_function)
-    test_dataset = test_records.map(_parse_record_function)
+    #test_dataset = test_records.map(_parse_record_function)
 
-    return train_dataset, eval_dataset, test_dataset
+    return train_dataset, eval_dataset
 
 #function to create dataset from tfrecords
 @timer
