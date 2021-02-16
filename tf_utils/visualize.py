@@ -160,24 +160,22 @@ def plot_confusion_matrix(model,test_ds,num_steps,total_samples,class_names):
                     color="white" if c_matrix[i, j] > thresh else "black")
   fig.tight_layout()    
 
-def visualize_data(data_df):
+def visualize_data(data_df,class_map):
       
       data_df=data_df
       print('Class Mapping\n-----------------')
-      class_map=data_df[['Label','Species']]
-      class_map=class_map.drop_duplicates()
-      class_map=class_map.sort_values(by=['Label']).reset_index(drop=True)
+      
       print(class_map)
       print('---------------------\n')
 
       print('Count per Species\n-----------------')
 
-      vc=data_df.Species.value_counts().rename_axis('Species').reset_index(name='Total')
+      vc=data_df.label.value_counts().rename_axis('label').reset_index(name='Total')
       print(vc)
       print('---------------------\n')
-      labels=vc.Species
+      labels=vc.label
       fig, ax = plt.subplots(1, 1)
-      species_hist = ax.hist(data_df.Label,bins=9,alpha=0.6,histtype='bar',ec='black',orientation='horizontal',)
+      species_hist = ax.hist(data_df.label,bins=5,alpha=0.6,histtype='bar',ec='black',orientation='horizontal',)
   
   
       plt.show()
@@ -185,15 +183,15 @@ def visualize_data(data_df):
 
 
 def show_image_sample(data_df,images_dir='./images'):
-  classes=['Chinee apple', 'Lantana', 'Parkinsonia', 'Parthenium', 'Prickly acacia', 'Rubber vine', 'Siam weed','Snake weed', 'Negative']
+  classes=['Cassava Bacterial Blight (CBB)','Cassava Brown Streak Disease (CBSD)','Cassava Green Mottle (CGM)','Cassava Mosaic Disease (CMD)','Healthy']
   fig, ax = plt.subplots(9,5,sharex=True,figsize=(8, 19))
-  fig.suptitle('Sample Images of Weed Species and Negative Set')    
+  fig.suptitle('Sample Images of Cassava Leaves')    
   for i in range(9):
       
       for j in range(5):
             
             
-            if ( j==0 and (i<9) ):
+            if ( j==0 and (i<5) ):
                 plt.setp(ax[i,j].get_xticklabels(), visible=False)
                 ax[i,j].tick_params(axis='x',which='both',bottom=False, top=False,labelbottom=False)
                 ax[i,j].tick_params(axis='y',which='both',left=False, right=False,labelleft=False)
