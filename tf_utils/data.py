@@ -26,6 +26,7 @@ from PIL import Image
 
 num_classes=5
 batch_size=32
+global IMG_SiZE=384
 class_names = [0,1,2,3,4]
 global species_names,train_df1,val_df,test_df
 
@@ -37,7 +38,7 @@ except NameError:
 else:
     pass
   
-IMG_SiZE=384
+
 
 def get_train_val_test_df(data_df):
   global train_df1,val_df,test_df
@@ -91,6 +92,7 @@ def _bytes_feature(value):
 def convert_to_tfrecord(input_files, output_file,images_dir=''):
     """Converts a file to TFRecords."""
     print('Generating %s' % output_file)
+    global IMG_SIZE
     with tf.io.TFRecordWriter(output_file) as record_writer:
         for filename, label in input_files:
             if images_dir !='':
@@ -149,6 +151,7 @@ def _parse_record_function(im_example):
 #parse a batch of records if you batch before map
 def parse_batch(batch_of_records):
     print('---parse batch -----')
+    global IMG_SIZE
     records=tf.io.parse_example(batch_of_records,rec_features)
     image = tf.io.decode_raw(records['image'], tf.uint8)
     print(image.dtype,image.shape,len(image))
@@ -169,6 +172,7 @@ def parse_batch(batch_of_records):
   
 #parse a batch of records if you batch before map
 def parse_batch_distort(batch_of_records):
+    global IMG_SIZE
     records=tf.io.parse_example(batch_of_records,rec_features)
     image = tf.io.decode_raw(records['image'], tf.uint8)
     
@@ -193,6 +197,7 @@ def parse_batch_distort(batch_of_records):
 
 #function to parse a single record and prepare an image/label set for training / evaluation
 def parse_record(im_example,distort,distort_fn):
+    global IMG_SIZE
     record = tf.io.parse_single_example(im_example, rec_features)
     
     image = tf.io.decode_raw(record['image'], tf.uint8)
