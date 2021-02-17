@@ -24,9 +24,9 @@ from sklearn.model_selection import train_test_split
 from PIL import Image
 
 
-num_classes=9
-batch_size=128
-class_names = ['0','1','2','3','4','5','6','7','8']
+num_classes=5
+batch_size=32
+class_names = [0,1,2,3,4]
 global species_names,train_df1,val_df,test_df
 
 #import tf if not defined 
@@ -36,6 +36,8 @@ except NameError:
     import tensorflow as tf
 else:
     pass
+  
+IMG_SiZE=384
 
 def get_train_val_test_df(data_df):
   global train_df1,val_df,test_df
@@ -94,7 +96,7 @@ def convert_to_tfrecord(input_files, output_file,images_dir=''):
             if images_dir !='':
               filename=os.path.join(images_dir,filename)
             img = Image.open(filename)
-            img = np.array(img.resize((256,256)))
+            img = np.array(img.resize((IMG_SIZE,IMG_SIZE)))
 
             feature = { 'label': _int64_feature(label),
                          'image': _bytes_feature(img.tostring()) }
@@ -152,7 +154,7 @@ def parse_batch(batch_of_records):
     print(image.dtype,image.shape,len(image))
     #image.set_shape([batch_size * 224 * 224 * 3]) # refer to https://stackoverflow.com/questions/35451948/clarification-on-tf-tensor-set-shape
     #image=tf.transpose(tf.reshape(image,[batch_size,3,224,224]),[0,2,3,1])
-    image=tf.reshape(image,[batch_size,256,256,3])
+    image=tf.reshape(image,[batch_size,IMG_SIZE,IMG_SIZE,3])
     #cast image as float32 as the model requires it
     image = tf.cast(image,tf.float32)
     #augment image if needed
@@ -172,7 +174,7 @@ def parse_batch_distort(batch_of_records):
     
     #image.set_shape([batch_size * 224 * 224 * 3]) # refer to https://stackoverflow.com/questions/35451948/clarification-on-tf-tensor-set-shape
     #image=tf.transpose(tf.reshape(image,[batch_size,3,224,224]),[0,2,3,1])
-    image=tf.reshape(image,[batch_size,256,256,3])
+    image=tf.reshape(image,[batch_size,IMG_SIZE,IMG_SIZE,3])
     #cast image as float32 as the model requires it
     image = tf.cast(image,tf.float32)
     
@@ -194,9 +196,9 @@ def parse_record(im_example,distort,distort_fn):
     record = tf.io.parse_single_example(im_example, rec_features)
     
     image = tf.io.decode_raw(record['image'], tf.uint8)
-    image.set_shape([256 * 256 * 3])
-    #image = tf.transpose(tf.reshape(image, [3, 256, 256]), [1, 2, 0])
-    image = tf.reshape(image, [256, 256,3])
+    image.set_shape([IMG_SIZE * IMG_SIZE * 3])
+    #image = tf.transpose(tf.reshape(image, [3, IMG_SIZE, IMG_SIZE]), [1, 2, 0])
+    image = tf.reshape(image, [IMG_SIZE, IMG_SIZE,3])
     #image = tf.reshape(image,[32,32,3]) #check this ..this doesn't seem to give the right image 
     image = tf.cast(image,tf.float32)
     #augment image if needed
