@@ -26,7 +26,8 @@ from PIL import Image
 
 num_classes=5
 batch_size=32
-global IMG_SiZE=384
+global IMG_SiZE
+IMG_SIZE=384
 class_names = [0,1,2,3,4]
 global species_names,train_df1,val_df,test_df
 
