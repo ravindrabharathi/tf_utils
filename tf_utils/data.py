@@ -25,7 +25,7 @@ from PIL import Image
 
 
 num_classes=5
-batch_size=128
+batch_size=64
 global IMG_SiZE
 IMG_SIZE=384
 class_names = [0,1,2,3,4]
