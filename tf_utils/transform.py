@@ -40,7 +40,7 @@ def random_crop(image,out_shape=(224,224,3)):
   return tf.image.random_crop(image,size=out_shape)
   
 
-def random_pad_crop(image,padding=28):
+def random_pad_crop(image,padding=48):
   shp=tf.shape(image)
   num_dim=len(image.get_shape().as_list())
   if num_dim==4:
