@@ -11,7 +11,7 @@ Supports the following
 
 ### Installation
 ```
-!pip install --upgrade git+https://github.com/ravindrabharathi/tf_utils@deepweeds 
+!pip install --upgrade git+https://github.com/ravindrabharathi/tf_utils@active_learning
 ```
  
 
