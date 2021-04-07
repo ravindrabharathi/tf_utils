@@ -37,11 +37,25 @@ except NameError:
 else:
     pass
 
+
+def split_train_test_df(data_df):
+  global train_df, train_df1,test_df
+  train_df, test_df = train_test_split(data_df, test_size=0.2,shuffle=True,random_state=42)
+  train_df1,train_df=train_test_split(train_df, test_size=0.75,shuffle=True,random_state=42)
+  return train_df1,train_df
+
+def get_random_train_df(train_df):
+  global train_df,train_df1
+  train_df2,train_df=train_test_split(train_df, test_size=0.75,shuffle=True,random_state=42)
+  train_df1=pd.concat([train_df1, train_df2], axis=0).reset_index()
+  return train_df1,train_df
+
 def get_train_val_test_df(data_df):
   global train_df1,val_df,test_df
   train_df, test_df = train_test_split(data_df, test_size=0.2,shuffle=True,random_state=42)
   train_df1, val_df = train_test_split(train_df, test_size=0.25,shuffle=True,random_state=42)
   return train_df1,val_df,test_df
+
 
 def get_class_map_and_species_names(data_df):
   class_map=data_df[['Label','Species']]
