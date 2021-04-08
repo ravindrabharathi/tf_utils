@@ -42,7 +42,7 @@ def split_train_test_df(data_df):
   global train_df, train_df1,test_df
   train_df, test_df = train_test_split(data_df, test_size=0.2,shuffle=True,random_state=42)
   train_df1,train_df=train_test_split(train_df, test_size=0.75,shuffle=True,random_state=42)
-  return train_df1,train_df
+  return train_df1,train_df,test_df
 
 def get_random_train_df():
   global train_df,train_df1
