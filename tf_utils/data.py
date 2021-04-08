@@ -79,7 +79,7 @@ def _get_file_names():
     """Returns the file names expected to exist in the input_dir."""
     file_names = {}
     file_names['train'] = list(zip(train_df1.Filename, train_df1.Label))
-    #file_names['eval'] = list(zip(val_df.Filename, val_df.Label))
+    file_names['unlabelled'] = list(zip(train_df.Filename, train_df.Label))
     file_names['test'] = list(zip(test_df.Filename, test_df.Label))
     
     return file_names
@@ -297,8 +297,8 @@ def get_tf_dataset_in_batches(recordstype='train', batch_size=128, shuffle=False
   #switch file name based on train or test data
   if recordstype == 'train':
     recordsfile = './tf_train/train.tfrecords'
-  elif recordstype== 'val':
-    recordsfile = './tf_train/eval.tfrecords'
+  elif recordstype== 'unlabelled':
+    recordsfile = './tf_train/unlabelled.tfrecords'
   elif recordstype== 'test':
     recordsfile = './tf_train/test.tfrecords'  
   #create dataset 
@@ -325,8 +325,8 @@ def get_train_ds(batch_size=batch_size,shuffle=True,distort=True,distort_fn=aug1
   
 #create val data
 @timer
-def get_eval_ds(batch_size=batch_size):
-    val_ds = get_tf_dataset_in_batches('val', batch_size)
+def get_unlabelled_ds(batch_size=batch_size):
+    unlabelled_ds = get_tf_dataset_in_batches('unlabelled', batch_size)
     return val_ds
 
 #create test data
