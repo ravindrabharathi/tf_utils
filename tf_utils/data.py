@@ -12,6 +12,7 @@ from six.moves import cPickle as pickle
 from six.moves import xrange
 
 import numpy as np
+import pandas as pd
 
 import time
 import functools
@@ -22,6 +23,7 @@ from tf_utils.transform import *
 
 from sklearn.model_selection import train_test_split
 from PIL import Image
+
 
 
 num_classes=9
