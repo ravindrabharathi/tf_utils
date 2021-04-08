@@ -79,7 +79,7 @@ def _get_file_names():
     """Returns the file names expected to exist in the input_dir."""
     file_names = {}
     file_names['train'] = list(zip(train_df1.Filename, train_df1.Label))
-    file_names['eval'] = list(zip(val_df.Filename, val_df.Label))
+    #file_names['eval'] = list(zip(val_df.Filename, val_df.Label))
     file_names['test'] = list(zip(test_df.Filename, test_df.Label))
     
     return file_names
