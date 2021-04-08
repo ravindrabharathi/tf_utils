@@ -42,16 +42,16 @@ def split_train_test_df(data_df):
   global train_df, train_df1,test_df
   train_df, test_df = train_test_split(data_df, test_size=0.2,shuffle=True,random_state=42)
   train_df1,train_df=train_test_split(train_df, test_size=0.75,shuffle=True,random_state=42)
-  train_df=train_df.reset_index()
-  train_df1=train_df1.reset_index()
-  test_df=test_df.reset_index()
+  train_df=train_df.reset_index(drop=True)
+  train_df1=train_df1.reset_index(drop=True)
+  test_df=test_df.reset_index(drop=True)
   return train_df1,train_df,test_df
 
 def get_random_train_df():
   global train_df,train_df1
   train_df2,train_df=train_test_split(train_df, test_size=0.75,shuffle=True,random_state=42)
-  train_df1=pd.concat([train_df1, train_df2], axis=0).reset_index()
-  train_df=train_df.reset_index()
+  train_df1=pd.concat([train_df1, train_df2], axis=0).reset_index(drop=True)
+  train_df=train_df.reset_index(drop=True)
   return train_df1,train_df
 
 def get_train_val_test_df(data_df):
@@ -344,7 +344,7 @@ def get_test_ds(batch_size=batch_size):
 def get_least_confidence_samples(model,ds,num_steps,total_size,sample_size):
   if sample_size<=1:
     sample_size=int(total_size*sample_size)
-  pred=model.predict(ds,num_steps=num_steps,verbose=0)
+  pred=model.predict(ds,steps=num_steps,verbose=0)
   pred=pred[:total_size]
   conf=[]
   indices=[]
@@ -363,7 +363,7 @@ def add_least_confidence_sample(model,ds,num_steps,total_size,sample_size):
   global train_df, train_df1
   if sample_size<=1:
     sample_size=int(total_size*sample_size)
-  pred=model.predict(ds,num_steps=num_steps,verbose=0)
+  pred=model.predict(ds,steps=num_steps,verbose=0)
   pred=pred[:total_size]
   conf=[]
   indices=[]
@@ -373,10 +373,11 @@ def add_least_confidence_sample(model,ds,num_steps,total_size,sample_size):
   conf=np.asarray(conf)
   indices=np.asarray(indices)
   least_conf_indices=np.argsort(conf)[:sample_size]
-  train_df2=train_df.loc[least_conf_indices,:].reset_index()
+  train_df2=train_df.loc[least_conf_indices,:]
   train_df=train_df[~train_df.isin(train_df2)].dropna()
-  train_df.reset_index()
-  train_df1=pd.concat([train_df1, train_df2], axis=0).reset_index()
+  train_df1=pd.concat([train_df1, train_df2], axis=0)
+  train_df=train_df.reset_index(drop=True)
+  train_df1=train_df1.reset_index(drop=True)
   return train_df1, train_df
 
 
@@ -384,7 +385,7 @@ def add_least_confidence_sample(model,ds,num_steps,total_size,sample_size):
 def get_top2_confidence_margin_samples(model,ds,num_steps,total_size,sample_size):
   if sample_size<=1:
     sample_size=int(total_size*sample_size)
-  pred=model.predict(ds,num_steps=num_steps,verbose=0)
+  pred=model.predict(ds,steps=num_steps,verbose=0)
   pred=pred[:total_size]
   margins=[]
   indices=[]
@@ -403,7 +404,7 @@ def add_top2_confidence_margin_samples(model,ds,num_steps,total_size,sample_size
   global train_df, train_df1
   if sample_size<=1:
     sample_size=int(total_size*sample_size)
-  pred=model.predict(ds,num_steps=num_steps,verbose=0)
+  pred=model.predict(ds,steps=num_steps,verbose=0)
   pred=pred[:total_size]
   margins=[]
   indices=[]
@@ -414,10 +415,10 @@ def add_top2_confidence_margin_samples(model,ds,num_steps,total_size,sample_size
   margins=np.asarray(margins)
   indices=np.asarray(indices)
   least_margin_indices=np.argsort(margins)[:sample_size]
-  train_df2=train_df.loc[least_margin_indices,:].reset_index()
+  train_df2=train_df.loc[least_margin_indices,:]
   train_df=train_df[~train_df.isin(train_df2)].dropna()
-  train_df.reset_index()
-  train_df1=pd.concat([train_df1, train_df2], axis=0).reset_index()
-  
+  train_df1=pd.concat([train_df1, train_df2], axis=0)
+  train_df=train_df.reset_index(drop=True)
+  train_df1=train_df1.reset_index(drop=True)
   return train_df1, train_df
   
