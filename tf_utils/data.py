@@ -327,7 +327,7 @@ def get_train_ds(batch_size=batch_size,shuffle=True,distort=True,distort_fn=aug1
 @timer
 def get_unlabelled_ds(batch_size=batch_size):
     unlabelled_ds = get_tf_dataset_in_batches('unlabelled', batch_size)
-    return val_ds
+    return unlabelled_ds
 
 #create test data
 @timer
