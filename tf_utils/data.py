@@ -359,6 +359,9 @@ def get_least_confidence_samples(model,ds,num_steps,total_size,sample_size):
   
   return least_conf_indices
 
+#convert any float values in Label column to int
+def convert_to_int(x):
+  return int(x)
 
 #add sample with least confident predictions to training dataset and change unlabelled ds accordingly
 def add_least_confidence_sample(model,ds,num_steps,total_size,sample_size):
@@ -379,6 +382,7 @@ def add_least_confidence_sample(model,ds,num_steps,total_size,sample_size):
   train_df=train_df[~train_df.isin(train_df2)].dropna()
   train_df1=pd.concat([train_df1, train_df2], axis=0)
   train_df=train_df.reset_index(drop=True)
+  train_df['Label']=train_df.Label.map(convert_to_int)
   train_df1=train_df1.reset_index(drop=True)
   return train_df1, train_df
 
@@ -421,6 +425,7 @@ def add_top2_confidence_margin_samples(model,ds,num_steps,total_size,sample_size
   train_df=train_df[~train_df.isin(train_df2)].dropna()
   train_df1=pd.concat([train_df1, train_df2], axis=0)
   train_df=train_df.reset_index(drop=True)
+  train_df['Label']=train_df.Label.map(convert_to_int)
   train_df1=train_df1.reset_index(drop=True)
   return train_df1, train_df
   
