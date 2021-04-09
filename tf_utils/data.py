@@ -49,9 +49,9 @@ def split_train_test_df(data_df):
   test_df=test_df.reset_index(drop=True)
   return train_df1,train_df,test_df
 
-def add_random_samples(sample_size=0.75):
+def add_random_samples(sample_size=0.25):
   global train_df,train_df1
-  train_df2,train_df=train_test_split(train_df, test_size=sample_size,shuffle=True,random_state=42)
+  train_df,train_df2=train_test_split(train_df, test_size=sample_size,shuffle=True,random_state=42)
   train_df1=pd.concat([train_df1, train_df2], axis=0).reset_index(drop=True)
   train_df=train_df.reset_index(drop=True)
   return train_df1,train_df
