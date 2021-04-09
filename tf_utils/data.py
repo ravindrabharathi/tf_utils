@@ -396,7 +396,7 @@ def get_top2_confidence_margin_samples(model,ds,num_steps,total_size,sample_size
   margins=[]
   indices=[]
   for idx,predxn in enumerate(pred):
-    sorted_predxn=predxn.[::-1].sort()
+    sorted_predxn=predxn[::-1].sort()
     margins.append(sorted_predxn[0]-sorted_predxn[1])
     indices.append(idx)
   margins=np.asarray(margins)
@@ -415,7 +415,7 @@ def add_top2_confidence_margin_samples(model,ds,num_steps,total_size,sample_size
   margins=[]
   indices=[]
   for idx,predxn in enumerate(pred):
-    sorted_predxn=predxn.[::-1].sort()
+    sorted_predxn=predxn[::-1].sort()
     margins.append(sorted_predxn[0]-sorted_predxn[1])
     indices.append(idx)
   margins=np.asarray(margins)
