@@ -431,7 +431,7 @@ def add_top2_confidence_margin_samples(model,ds,num_steps,total_size,sample_size
 
 
 #add entropy based sampling for training  
-def add_entropy_based_samples(model,ds,num_steps,total_size,sample_size):
+def add_max_entropy_based_samples(model,ds,num_steps,total_size,sample_size):
   global train_df, train_df1
   if sample_size<=1:
     sample_size=int(total_size*sample_size)
