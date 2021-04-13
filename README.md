@@ -1,13 +1,14 @@
 # tf_utils
-Utility package for training CNN using tensorflow2, TFRecords, tf.data
+Utility package for using active learning strategies for labelling image datesets and training CNN using tensorflow2, TFRecords, tf.data
 Supports the following
 1. Create tfrecords for deepweeds dataset https://github.com/AlexOlsen/DeepWeeds
 2. Save TFRecords for Train, eval and Test sets 
 3. Retreve image data as tf.data.TFRecordDataset
 4. Image Augmentation (random-pad_crop, flip-left_right, cutout) of Image Batches
-5. Plot images from Dataset 
-6. Plot misclassified images 
-7. Plot Confusion Matrix
+5. Active Learning data points selection for labelling using Least confidence sampling , Margin sampling (Entropy sampling to be added) 
+6. Random sampling method for getting a baseline is supported 
+7. Plot images from Dataset 
+8. Plot Confusion Matrix
 
 ### Installation
 ```
@@ -90,32 +91,40 @@ score = model.evaluate(test_ds, steps =test_steps, verbose=1)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 ```
+### Sampling methods 
+```
+num_steps=np.ceil(len(train_df)/batch_size)
+total_samples=len(train_df)
+sample_size=0.25
+```
+#### Random Sampling 
+```
+train_df1,train_df=ds.add_random_samples(sample_size=sample_size)
+```
+
+#### Least confidence sampling 
+```
+train_df1,train_df=ds.add_least_confidence_sample(model,unlabelled_ds,num_steps,total_samples,sample_size)
+```
+
+#### Margin Sampling 
+```
+train_df1,train_df=ds.add_top2_confidence_margin_samples(model,unlabelled_ds,num_steps,total_samples,sample_size)
+```
 
 ### Visualization 
 
 #### import visualization module
 ```
 import tf_utils.visualize as vz
-```
---to be added---
+
+
+num_steps=np.ceil(len(test_df)/batch_size)
+total_samples=len(test_df)
+vz.plot_confusion_matrix(model,test_ds,num_steps,total_samples,list(species_names.values()))
 
 ```
+![image](https://user-images.githubusercontent.com/597097/114504489-91a6b000-9c4c-11eb-8433-2fc73fb96e26.png)
 
-#### Note : 
-On Colab tf defaults to tensorflow2 
-if not , In order to use tensorflow2 on colab , you may use the following code to select tf2 on colab
-```
-from __future__ import absolute_import, division, print_function, unicode_literals
-
-# Install TensorFlow
-try:
-  # %tensorflow_version only exists in Colab.
-  %tensorflow_version 2.x
-except Exception:
-  pass
-
-import tensorflow as tf
-
-```
 
 
