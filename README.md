@@ -43,6 +43,13 @@ The data module calls the following augmentation for training dataset image batc
  cutout(flip_left_right(random_pad_crop(image_batch)))
  
 ``` 
+### Plot images from Dataset 
+
+```
+vz.plot_images_from_ds(train_ds,"Samples from Train Dataset",species_names)
+```
+![image](https://user-images.githubusercontent.com/597097/114504802-11cd1580-9c4d-11eb-9d60-c7835d705396.png)
+
   
 ### training
 ```
