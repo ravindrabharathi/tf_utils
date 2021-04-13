@@ -1,4 +1,4 @@
-# tf_utils
+# tf_utils  (Active Learning)
 Utility package for using active learning strategies for labelling image datesets and training CNN using tensorflow2, TFRecords, tf.data
 Supports the following
 1. Create tfrecords for deepweeds dataset https://github.com/AlexOlsen/DeepWeeds
