@@ -428,4 +428,32 @@ def add_top2_confidence_margin_samples(model,ds,num_steps,total_size,sample_size
   train_df['Label']=train_df.Label.map(convert_to_int)
   train_df1=train_df1.reset_index(drop=True)
   return train_df1, train_df
+
+
+#add entropy based sampling for training  
+def add_entropy_based_samples(model,ds,num_steps,total_size,sample_size):
+  global train_df, train_df1
+  if sample_size<=1:
+    sample_size=int(total_size*sample_size)
+  pred=model.predict(ds,steps=num_steps,verbose=0)
+  pred=pred[:total_size]
+  entropies=[]
+  indices=[]
+  for idx,predxn in enumerate(pred):
+    log2p=np.log2(predxn)
+    pxlog2p=predxn * log2p
+    n=len(predxn)
+    entropy=-np.sum(pxlog2p)/np.log2(n)
+    entropies.append(entropy)
+    indices.append(idx)
+  entropies=np.asarray(entropies)
+  indices=np.asarray(indices)
+  max_entropy_indices=np.argsort(entropies)[-sample_size:]
+  train_df2=train_df.loc[max_entropy_indices,:]
+  train_df=train_df[~train_df.isin(train_df2)].dropna()
+  train_df1=pd.concat([train_df1, train_df2], axis=0)
+  train_df=train_df.reset_index(drop=True)
+  train_df['Label']=train_df.Label.map(convert_to_int)
+  train_df1=train_df1.reset_index(drop=True)
+  return train_df1, train_df
   
