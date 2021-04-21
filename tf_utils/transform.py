@@ -20,7 +20,7 @@ def center_pad_crop(image,padding=28):
 
   return image
 
-def pad_img(image,padding=28):
+def pad_img(image,padding=8):
   shp=tf.shape(image)
   num_dim=len(image.get_shape().as_list())
   if num_dim==4:
@@ -32,15 +32,15 @@ def pad_img(image,padding=28):
 
 
 
-def random_crop(image,out_shape=(224,224,3)):
+def random_crop(image,out_shape=(65,65,6)):
   shp=tf.shape(image)
   num_dim=len(image.get_shape().as_list())
   if num_dim==4:
-    out_shape=(shp[0],224,224,3)
+    out_shape=(shp[0],65,65,6)
   return tf.image.random_crop(image,size=out_shape)
   
 
-def random_pad_crop(image,padding=28):
+def random_pad_crop(image,padding=8):
   shp=tf.shape(image)
   num_dim=len(image.get_shape().as_list())
   if num_dim==4:
@@ -55,7 +55,7 @@ def random_pad_crop(image,padding=28):
 def flip_left_right(image):
   return tf.image.random_flip_left_right(image)
 
-def cutout(img, prob=100, size=56, min_size=14, use_fixed_size=True):
+def cutout(img, prob=100, size=16, min_size=4, use_fixed_size=True):
   num_dim=len(img.get_shape().as_list())
   if num_dim==4:
     return tf.cond(tf.random.uniform([], 0, 100) > prob, lambda: img , lambda: get_cutout(img,prob,size,min_size,use_fixed_size))
@@ -63,7 +63,7 @@ def cutout(img, prob=100, size=56, min_size=14, use_fixed_size=True):
     return tf.cond(tf.random.uniform([], 0, 100) > prob, lambda: img , lambda: get_cutout_2(img,prob,size,min_size,use_fixed_size))
   
 #for batch of images 
-def get_cutout(img,prob=50,size=56,min_size=14,use_fixed_size=True):
+def get_cutout(img,prob=50,size=16,min_size=4,use_fixed_size=True):
   
   shp=tf.shape(img)
   
@@ -115,7 +115,7 @@ def get_cutout(img,prob=50,size=56,min_size=14,use_fixed_size=True):
   return cut_img 
 
 #for single image
-def get_cutout_2(img,prob=50,size=56,min_size=14,use_fixed_size=True):
+def get_cutout_2(img,prob=50,size=16,min_size=4,use_fixed_size=True):
   
   shp=tf.shape(img)
   
