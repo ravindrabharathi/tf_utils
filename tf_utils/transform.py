@@ -182,3 +182,7 @@ def normalize_img2(img,mean,std):
 def aug1(image):
   #return cutout(flip_left_right(random_pad_crop(image)))
   return cutout(flip_left_right(image))
+
+def aug2(image):
+  return cutout(flip_left_right(random_pad_crop(image)))
+   
