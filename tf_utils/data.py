@@ -30,6 +30,7 @@ num_classes=4
 batch_size=128
 class_names = ['0','1','2','3']
 band_list=['B1','B2','B3','B4','B5','B6','B7','B8','B9','B10','B11']
+band_list2=['B2','B3','B4','B5','B6','B7']
 
 
 #import tf if not defined 
@@ -78,7 +79,7 @@ def parse_band(band_info):
 def parse_record(im_example,distort,distort_fn):
     record = tf.io.parse_single_example(im_example, rec_features)
 
-    bands=[parse_band(record[band]) for band in band_list]
+    bands=[parse_band(record[band]) for band in band_list2]
     
     image = tf.concat(bands, -1)
     
