@@ -71,7 +71,7 @@ def _parse_record_function(im_example):
     return tf.io.parse_single_example(im_example, rec_features)
 
 def parse_band(band_info):
-  band = tf.decode_raw(band_info, tf.uint8)
+  band = tf.io.decode_raw(band_info, tf.uint8)
   return tf.reshape(band[:4225], shape=(65, 65, 1))
 
 #function to parse a single record and prepare an image/label set for training / evaluation
