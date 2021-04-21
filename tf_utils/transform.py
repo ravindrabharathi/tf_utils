@@ -186,3 +186,5 @@ def aug1(image):
 def aug2(image):
   return cutout(flip_left_right(random_pad_crop(image)))
    
+def aug3(image):
+  return cutout(flip_left_right(image),30)
